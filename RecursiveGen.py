@@ -1,6 +1,4 @@
 # http://natureofcode.com/book/chapter-8-fractals/
-# Data structure: Representation
-# This is the algorithm for generating city.
 
 # demo
 from pyx import *
