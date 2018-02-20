@@ -1,6 +1,5 @@
 # http://natureofcode.com/book/chapter-8-fractals/
 
-# demo
 from pyx import *
 
 _canvas = canvas.canvas()
