@@ -1,19 +1,26 @@
 import Representation
 import Evaluation
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import numpy
 
 class TestGound:
-
+	generator = 0
 	def __init__(self):
 		geno = Representation.PlatesGeno()
-		geno.plate_number = 3
-		geno.default_height = [1,5,10]
-		geno.joint_point = (4,4)
-		geno.defualt_origin_center = [(1,1),(8,3),(4,12)]
+		geno.plate_number = 15
+		geno.default_height = (numpy.random.rand(geno.plate_number)*5).astype(int)
+		geno.defualt_origin_center = numpy.random.rand(geno.plate_number,2)*18
+		geno.plate_direction = ((numpy.random.rand(geno.plate_number,2)-0.5)*2).astype(int)
+		geno.crash_count = 1
+
+		map_generator = Representation.Map()
+		map_generator.create_mountains(geno)
+		self.generator = map_generator
 		
-		gen_map = Representation.Map()
-		gen_map.create_mountains(geno)
-		gen_map.print()
-
-
 #run a test
-TestGound()
+X,Y,Z = TestGound().generator.getXYZ()
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+surf = ax.plot_surface(X, Y, Z)
+plt.show()
