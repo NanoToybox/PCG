@@ -7,9 +7,9 @@ class Map:
 	#plate冲击的问题是，地球的地貌是经过长期plate冲击得来的，还要模拟plate本身变化，才能得到现在的地貌。
 
 	#general bounds
-	size_x = 18 	#depth
-	size_z = 18  	#horizontal
-	size_y = 16  	#vertical
+	size_x = 32 	#depth
+	size_z = 32  	#horizontal
+	size_y = 8  	#vertical
 	gen_map = []	#pheno map [x][z]
 	gen_map_plate = []	#mark tile's plate number
 
@@ -24,12 +24,12 @@ class Map:
 	def create_mountains(self, geno):
 		c_geno = self.get_legitimate_geno(geno)
 		self.init_plate(c_geno)
-		self.print()
+		#self.print()
 
 		#itor-plates move
 		for itor in range(c_geno.crash_count):
 			self.move_plates(c_geno)
-		self.print()
+		#self.print()
 
 	# get legitimate geno
 	def get_legitimate_geno(self, geno):
@@ -42,7 +42,7 @@ class Map:
 
 		return geno
 
-	# mark all tile to each plate, set tile defualt height
+	# mark all tile to each plate, set tile default height
 	def init_plate(self, geno):
 		for x in range(self.size_x):
 			for z in range(self.size_z):
@@ -67,11 +67,11 @@ class Map:
 		new_gen_map_plate = [[-1 for z in range(self.size_z)] for x in range(self.size_x)]		
 		for x in range(self.size_x):
 			for z in range(self.size_z):
-				p = self.gen_map_plate[x][z]
+				p = self.gen_map_plate[x][z]	#move p of map to new_map
 				new_x = x + geno.plate_direction[p][0]
 				new_z = z + geno.plate_direction[p][1]
 				if(new_x in range(self.size_x) and
-					new_z in range(self.size_z)):
+					new_z in range(self.size_z) and self.gen_map[x][z]> new_map[new_x][new_z]): #if clashed, use the higher one
 					new_map[new_x][new_z] = self.gen_map[x][z]
 					new_gen_map_plate[new_x][new_z] = p
 		#mark changes
@@ -80,13 +80,13 @@ class Map:
 				if new_gen_map_plate[x][z] == -1:
 					#solve abyss : sink
 					new_map[x][z] = new_map[x][z] - 1
-					print("sink")
+					#print("sink")
 				elif (new_gen_map_plate[x][z] != self.gen_map_plate[x][z] and 
 					new_gen_map_plate[x][z] != -1 
 					and self.gen_map_plate[x][z] != -1):
 					#solve conflict : arise
 					new_map[x][z] = new_map[x][z] + 1
-					print("rise")
+					#print("rise")
 		self.gen_map=new_map
 		self.gen_map_plate=new_gen_map_plate
 
